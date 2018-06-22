@@ -32,7 +32,12 @@
  */
 
 params.name          = "A Nextflow Implementation of VAST-TOOLS"
-params.reads         = "$baseDir/tutorial/reads/*_{1,2}.fastq"
+//params.reads         = "$baseDir/tutorial/reads/*_{1,2}.fastq"
+
+params.reads         = "$baseDir/tutorial/reads"
+params.readsExtension="fastq"
+allReads="${params.reads}/*_{1,2}.${params.readsExtension}"
+
 params.groups        = "$baseDir/tutorial/groups/groups.txt"
 params.species       = "human"
 params.readLen       = 101 
@@ -101,7 +106,7 @@ results_path = file(params.output)
  */
  
 Channel
-    .fromPath( params.reads )
+    .fromPath( allReads )
     .ifEmpty { error "Cannot find any reads matching: ${params.reads}" }
     .map { path -> 
        def prefix = readPrefix(path, params.reads)
